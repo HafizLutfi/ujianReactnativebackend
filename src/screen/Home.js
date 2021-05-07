@@ -13,24 +13,23 @@ import {
 export class Home extends Component {
   constructor(props) {
     super(props);
+    // Don't call this.setState() here!
     this.state = {
-      item: [],
+      data: [],
     };
   }
 
   componentDidMount() {
     this.getData();
-    console.log(this.state.item);
   }
 
   getData = () => {
-    //Make a request for a user with a given ID
     axios
-      .get(`http://192.168.43.232:8080/`)
+      .get(`http://192.168.43.232:8080/backend/`)
       .then(response => {
-        console.log(response.data);
         let data = response.data;
-        this.setState({item: data});
+        console.log(response.data);
+        this.setState({data: data});
       })
       .catch(function (error) {
         console.log(error);
@@ -76,6 +75,14 @@ export class Home extends Component {
   //     });
   // };
 
+  // render = ({item}) => {
+  //   <View>
+  //     <Text>Nama : {item.nama}</Text>
+  //     <Text>Email : {item.email}</Text>
+  //     <Text>Address : {item.address}</Text>
+  //     <Text>Phone : {item.phone}</Text>
+  //   </View>;
+  // };
   render() {
     return (
       <SafeAreaView style={styles.container}>
@@ -88,12 +95,12 @@ export class Home extends Component {
     );
   }
 }
-
 export default Home;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
+    marginLeft: 4,
   },
 });
