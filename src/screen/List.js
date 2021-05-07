@@ -6,10 +6,10 @@ import {
   View,
   SafeAreaView,
   FlatList,
-  Picker,
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
 
 export default class List extends Component {
   constructor(props) {
@@ -24,7 +24,9 @@ export default class List extends Component {
   componentDidMount() {
     this.getData();
   }
-
+  componentDidUpdate() {
+    this.getDataSearch();
+  }
   getData = () => {
     axios
       .get(`http://192.168.43.232:8080/backend/`)
@@ -38,10 +40,43 @@ export default class List extends Component {
       });
   };
   getDataSearch = () => {
-    console.log(this.state.searchby);
+    console.log(this.state.keyword);
     if (this.state.searchby === 'Name') {
       axios
-        .get(`http://192.168.43.232:8080/name/${this.state.keyword}`)
+        .get(`http://192.168.43.232:8080/nama/${this.state.keyword}`)
+        .then(response => {
+          // console.log(response.data);
+          const data = response.data;
+          this.setState({data: data});
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else if (this.state.searchby === 'Email') {
+      axios
+        .get(`http://192.168.43.232:8080/email/${this.state.keyword}`)
+        .then(response => {
+          // console.log(response.data);
+          const data = response.data;
+          this.setState({data: data});
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else if (this.state.searchby === 'Phone') {
+      axios
+        .get(`http://192.168.43.232:8080/phone/${this.state.keyword}`)
+        .then(response => {
+          // console.log(response.data);
+          const data = response.data;
+          this.setState({data: data});
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else if (this.state.searchby === 'Address') {
+      axios
+        .get(`http://192.168.43.232:8080/address/${this.state.keyword}`)
         .then(response => {
           // console.log(response.data);
           const data = response.data;
@@ -67,17 +102,21 @@ export default class List extends Component {
     return (
       <SafeAreaView>
         <Text style={{fontSize: 17}}>Search By:</Text>
-        <Picker
-          style={{borderWidth: 1}}
-          selectedValue={this.state.searchby}
-          onValueChange={itemValue => this.setState({searchby: itemValue})}>
-          <Picker.Item label="Name" value="Name" />
-          <Picker.Item label="Email" value="Email" />
-          <Picker.Item label="Phone" value="Phone" />
-          <Picker.Item label="Address" value="Address" />
-        </Picker>
+        <RNPickerSelect
+          onValueChange={value => this.setState({searchby: value})}
+          pickerProps={{style: {height: 40, overflow: 'hidden'}}}
+          items={[
+            {label: 'Name', value: 'Name'},
+            {label: 'Email', value: 'Email'},
+            {label: 'Phone', value: 'Phone'},
+            {label: 'Address', value: 'Address'},
+          ]}
+        />
         <Text style={{fontSize: 17}}>Keyword</Text>
-        <TextInput style={{borderWidth: 1, marginLeft: 3, marginRight: 3}} />
+        <TextInput
+          style={{borderWidth: 1, marginLeft: 3, marginRight: 3}}
+          onChangeText={data => this.setState({keyword: data})}
+        />
         <TouchableOpacity
           style={{
             marginTop: 4,
@@ -86,8 +125,8 @@ export default class List extends Component {
             backgroundColor: 'red',
             alignItems: 'center',
           }}
-          onPress={data => {
-            this.getDataSearch({keyword: data});
+          onPress={value => {
+            this.getDataSearch();
           }}>
           <Text>Search</Text>
         </TouchableOpacity>
