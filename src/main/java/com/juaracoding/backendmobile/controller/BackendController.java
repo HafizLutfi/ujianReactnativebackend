@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,14 +18,14 @@ public class BackendController {
 	@Autowired
 	BackendRepository backendrepo;
 	
-	@GetMapping("/")
+	@GetMapping("/backend/")
 	public List<Backend> getAll() {
 		return (List<Backend>) backendrepo.findAll();
 	}
 	
-	@GetMapping("/{id}")
-	public List<Backend> getAllById(@PathVariable String id){
-		return backendrepo.findAllById(Long.parseLong(id));
+	@GetMapping("/email/{email}")
+	public List<Backend> getAllById(@PathVariable String email){
+		return backendrepo.findAllByEmail(email);
 	}
 	
 	@GetMapping("/nama/{nama}")
@@ -42,6 +43,7 @@ public class BackendController {
 		return backendrepo.findAllByAddress(address);
 	}
 	
+	@PostMapping("/tambah")
 	public String addBackend(@RequestBody Backend backend) {
 		backendrepo.save(backend);
 		return "Data Berhasil disimpan";

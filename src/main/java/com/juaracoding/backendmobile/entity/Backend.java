@@ -24,5 +24,5 @@ public class Backend {
 	private String nama;
 	private String email;
 	private int phone;
-	private String alamat;
+	private String address;
 }

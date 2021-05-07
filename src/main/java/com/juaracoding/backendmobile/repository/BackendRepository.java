@@ -20,4 +20,7 @@ public interface BackendRepository extends CrudRepository<Backend, Long>{
 	@Query(value="select * from backend where addres LIKE %?1%",nativeQuery = true)
 	List<Backend> findAllByAddress(String address);
 
+	@Query(value="select * from backend where email LIKE %?1%",nativeQuery = true)
+	List<Backend> findAllByEmail(String email);
+
 }
