@@ -1,23 +1,23 @@
 import axios from 'axios';
 import React, {Component} from 'react';
-import {Text, TextInput, View, StyleSheet, Button} from 'react-native';
+import {Text, View, StyleSheet, TextInput, Button} from 'react-native';
 
-export class Register extends Component {
+export class Update extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      nama: '',
-      email: '',
-      phone: 0,
-      address: '',
+      id: this.props.route.params.id,
+      nama: this.props.route.params.nama,
+      email: this.props.route.params.email,
+      phone: this.props.route.params.phone,
+      address: this.props.route.params.address,
     };
   }
 
-  save() {
+  update() {
     axios
-      .post(`http://192.168.43.232:8080/tambah`, this.state)
+      .put(`http://192.168.43.232:8080/update/${this.state.id}`, this.state)
       .then(response => {
-        // console.log(response.data);
         alert(response.data);
         this.props.navigation.navigate('List');
       })
@@ -25,36 +25,42 @@ export class Register extends Component {
         console.log(error);
       });
   }
+
   render() {
+    console.log(this.state.phone);
     return (
       <View style={{marginTop: 20}}>
         <Text style={styles.text}> Username </Text>
         <TextInput
+          value={this.state.nama}
           style={styles.input}
           onChangeText={data => this.setState({nama: data})}
         />
         <Text style={styles.text}> Email </Text>
         <TextInput
+          value={this.state.email}
           style={styles.input}
           onChangeText={data => this.setState({email: data})}
         />
         <Text style={styles.text}> Phone </Text>
         <TextInput
+          value={String(this.state.phone)}
           style={styles.input}
           onChangeText={data => this.setState({phone: parseInt(data)})}
         />
         <Text style={styles.text}> Address</Text>
         <TextInput
+          value={this.state.address}
           style={styles.input}
           onChangeText={data => this.setState({address: data})}
         />
-        <Button title="Submit" onPress={this.save.bind(this)} />
+        <Button title="Submit" onPress={this.update.bind(this)} />
       </View>
     );
   }
 }
 
-export default Register;
+export default Update;
 
 const styles = StyleSheet.create({
   input: {
